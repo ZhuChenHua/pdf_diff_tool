@@ -19,7 +19,7 @@ async def async_compare(file1, file2):
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
     # 构建 temp 目录的绝对路径
-    temp_dir = os.path.join(project_root, "temp")
+    temp_dir = os.path.join(project_root, "data/temp")
 
     # 检查并创建 temp 目录
     if not os.path.exists(temp_dir):
