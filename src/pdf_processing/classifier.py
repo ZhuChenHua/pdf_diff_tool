@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 from PIL import Image
 from torchvision import models, transforms
+from torchvision.models import ResNet18_Weights
 from pdf2image import convert_from_path
 
 # 配置日志记录
@@ -33,7 +34,7 @@ class PDFClassifier:
 
     def __init__(
         self,
-        text_threshold: float = 0.6,
+        text_threshold: float = 0.8,
         model_path: Optional[Union[str, Path]] = None,
         sample_pages: int = 5,
         device: Optional[str] = None,
@@ -57,7 +58,7 @@ class PDFClassifier:
 
     def _init_model(self, model_path: Optional[Union[str, Path]]) -> nn.Module:
         """初始化并加载预训练模型"""
-        model = models.resnet18(pretrained=True)
+        model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
         model.fc = nn.Linear(512, 2)  # 修改最后的全连接层
 
         if model_path:
@@ -95,7 +96,7 @@ class PDFClassifier:
                         text_pages += 1
 
                 ratio = text_pages / len(sampled_pages)
-                logger.debug(f"文本页面比例: {ratio:.2f}")
+                logger.info(f"文本页面比例: {ratio:.2f}")
                 return ratio >= self.text_threshold
 
         except Exception as e:
